@@ -228,7 +228,7 @@
         $(document).ready(function () {
             $("#loadingOverlay").hide();
             $.ajax({
-                url: 'getJD',
+                url: 'https://thefilmkaar.pythonanywhere.com/getJD',
                 type: 'POST',
                 success: function (response) {
                     const jobs = response.jobs; 

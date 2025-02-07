@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tanishq0917t/Lets-Compile/static/careers_styles.css">
+    <script src="https://cdn.jsdelivr.net/gh/tanishq0917t/Lets-Compile/static/careers_script.js"></script>
+    <style>
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .career-page {
+            padding: 10px;
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .job-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .job-posting {
+            background-color: #1e1e1e;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .job-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .job-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 8px 0;
+        }
+
+        .job-location,
+        .job-positions {
+            font-size: 14px;
+            margin: 0 0 5px 0;
+        }
+
+        .apply-btn {
+            padding: 8px 12px;
+            font-size: 14px;
+            background-color: #6200ea;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            width: 120px;
+        }
+
+        .apply-btn:hover {
+            background-color: #3700b3;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            background-color: #333333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: none;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #6200ea;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3700b3;
+        }
+
+        #genres {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background-color: #333333;
+            border-radius: 5px;
+        }
+
+        #genres label {
+            font-size: 16px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #genres input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        #other-genre {
+            margin-top: 5px;
+            padding: 5px;
+            font-size: 14px;
+            color: #000;
+            background-color: #ffffff;
+        }
+
+        #experience {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 15px;
+            background-color: #333333;
+            padding: 2px;
+            border-radius: 5px;
+        }
+
+        #experience label {
+            font-size: 16px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #experience input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#loadingOverlay").hide();
+            $.ajax({
+                url: 'getJD',
+                type: 'POST',
+                success: function (response) {
+                    const jobs = response.jobs; 
+                    const jobList = document.querySelector('.job-list');
+                    jobs.forEach(job => {
+                        const li = document.createElement('li');
+                        li.classList.add('job-posting');
+                        li.dataset.jobId = job.id; 
+                        li.innerHTML = `
+                            <h2>${job.title}</h2>
+                            <button class="apply-btn" 
+                                data-job-id="${job.id}" 
+                                data-job-title="${job.title}" 
+                                data-job-description="${job.description}" 
+                                data-job-responsibilities="${encodeURIComponent(JSON.stringify(job.responsibilities))}">Apply</button>
+                        `;
+                        jobList.appendChild(li);
+                    });
+
+                    $('.apply-btn').on('click', function () {
+                        const jobId = $(this).data('job-id');
+                        const jobTitle = $(this).data('job-title');
+                        const jobDescription = $(this).data('job-description');
+                        const jobResponsibilities = JSON.parse(decodeURIComponent($(this).data('job-responsibilities')));
+
+                        openApplicationModal(jobId, jobTitle, jobDescription, jobResponsibilities);
+                    });
+                },
+                error: function (err) {
+                    console.error('Error fetching jobs:', err);
+                }
+            });
+
+            function openApplicationModal(jobId, jobTitle, jobDescription, jobResponsibilities) {
+                $('#job-title').text(jobTitle); 
+                $('#j_id').text(jobId);
+                $('#applicationModal').fadeIn(); 
+
+                $('#applicationModal .modal-content p').text(jobDescription);
+
+                const responsibilitiesList = $('#applicationModal .modal-content ul');
+                responsibilitiesList.empty(); 
+                jobResponsibilities.forEach(responsibility => {
+                    responsibilitiesList.append(`<li>${responsibility}</li>`);
+                });
+            }
+            $('.close-btn').on('click', function () {
+                $('#applicationModal').fadeOut();
+            });
+
+            $('#job-application-form').on('submit', function (e) {
+                e.preventDefault();
+                alert('Application submitted!');
+                $('#applicationModal').fadeOut();
+            });
+        });
+        function validate() 
+        {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const experience = document.querySelector('input[name="experience"]:checked').value;
+            const social = document.getElementById('social').value.trim();
+            const resume = document.getElementById('resume').files[0];
+            const genres = Array.from(document.querySelectorAll('input[name="genres[]"]:checked')).map(
+                (checkbox) => checkbox.value
+            );
+            const otherGenre = document.getElementById('other-genre').value.trim();
+            const portfolio = document.getElementById('portfolio').value.trim();
+            const work = document.getElementById('sampleWork').value.trim();
+
+            if (otherGenre) genres.push(otherGenre);
+
+            if (name === "") {
+                alert("Please enter your full name.");
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === "" || !emailRegex.test(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(phone)) {
+                alert("Please enter a valid 10-digit phone number.");
+                return;
+            }
+
+            if (!experience) {
+                alert("Please select your experience level.");
+                return;
+            }
+
+            if (genres.length === 0) {
+                alert("Please select at least one preferred genre.");
+                return;
+            }
+
+            if (social === "") {
+                alert("Please provide a link to your social platform profile.");
+                return;
+            }
+
+            if (!resume) {
+                alert("Please upload your resume.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("name", name);
+            formData.append("email", email);
+            formData.append("phone", phone);
+            formData.append("experience", experience);
+            formData.append("social", social);
+            formData.append("genres", JSON.stringify(genres));
+            formData.append("resume", resume);
+            formData.append("jobId",document.getElementById('j_id').innerHTML);
+
+            if (portfolio.length>0) {
+                formData.append("portfolio", portfolio);
+            }
+            if (work.length>0) {
+                formData.append("work", work);
+            }
+
+            $("#loadingOverlay").show();
+
+            $.ajax({
+                url: '/submit-application', 
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false, 
+                success: function (response) {
+                    $("#loadingOverlay").hide();
+                    $('#applicationModal').fadeOut();
+                    document.getElementById('page').style.display='none';
+                    document.getElementById('thanks').style.display='inline';
+                },
+                error: function (err) {
+                    console.error("Error submitting application:", err);
+                    alert("There was an error submitting your application. Please try again.");
+                },
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="career-page" id="thanks" style="display: none;">
+        <a href="/">
+            <h1>The Filmkaar</h1>
+        </a>
+        <p>Thank you for submitting your application with us. Our team will review your application and if you are good fit, we will reach out to you soon :)</p>
+    </div>
+    <div class="career-page" id="page">
+        <a href="/">
+            <h1>The Filmkaar</h1>
+        </a>
+        <h2>Join Our Team</h2>
+        <ul class="job-list">
+        </ul>
+    </div>
+    <div id="loadingOverlay" class="loading-overlay">
+        <!-- Loading GIF -->
+        <div class="loading">
+            <img src="static/ll.gif" alt="Loading..." />
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal" id="applicationModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <center>
+                <h2>Apply for <span id="job-title"></span></h2>
+            </center>
+            <span>Job ID: </span><span id="j_id"></span>
+            <h3>Job Description:</h3>
+            <p id="job_desciption"></p>
+            <h3>Responsibilities:</h3>
+            <ul>
+
+            </ul>
+            <form id="job-application-form">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email Address*</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Phone Number *</label>
+                <input type="text" id="phone" name="phone" required>
+
+
+                <div id="genres" style="display: flex; flex-direction: column;">
+                    <label for="genres">Preferred Genres *</label>
+                    <label><input type="checkbox" name="genres[]" value="Drama"> Drama</label>
+                    <label><input type="checkbox" name="genres[]" value="Comedy"> Comedy</label>
+                    <label><input type="checkbox" name="genres[]" value="Thriller"> Thriller</label>
+                    <label><input type="checkbox" name="genres[]" value="Horror"> Horror</label>
+                    <label><input type="checkbox" name="genres[]" value="Sci-Fi"> Sci-Fi</label>
+                    <label><input type="checkbox" name="genres[]" value="Other"> Other (Please specify)</label>
+                    <input type="text" id="other-genre" name="other_genre" placeholder="Specify if 'Other'"
+                        style="margin-top: 5px;">
+                </div>
+
+                <label for="experience">Experience Level *</label>
+                <div id="experience">
+                    <label><input type="radio" name="experience" value="Beginner" required> Beginner</label>
+                    <label><input type="radio" name="experience" value="Intermediate" required> Intermediate</label>
+                    <label><input type="radio" name="experience" value="Expert" required> Expert</label>
+                </div>
+
+                <label for="portfolio">Portfolio Link (Optional)</label>
+                <input type="text" id="portfolio" name="portfolio" required>
+
+                <label for="social">Social Platform Link (LinkedIn/Instagram) *</label>
+                <input type="text" id="social" name="social" required>
+
+                <label for="sampleWork">Sample Work Link (Optional)</label>
+                <input type="text" id="sampleWork" name="sampleWork" required>
+
+                <label for="resume">Upload Resume *</label>
+                <input type="file" id="resume" name="resume" required>
+
+                <button type="button" onClick="validate()">Submit Application</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

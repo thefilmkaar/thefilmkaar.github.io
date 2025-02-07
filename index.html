@@ -9,17 +9,16 @@
     <script>
         function dot() 
         {
-            fetch("https://tanishq08.pythonanywhere.com/")
+            fetch("https://thefilmkaar.pythonanywhere.com/")
                 .then(response => response.json())
                 .then(data => console.log(data))
                 .catch(error => console.error("Error:", error));
         }
         function tick()
         {
-            fetch("https://tanishq08.pythonanywhere.com/check", {
+            fetch("https://thefilmkaar.pythonanywhere.com/getJD", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ key: "value" })
+                headers: { "Content-Type": "application/json" }
             })
             .then(response => response.json())
             .then(data => console.log(data))

@@ -371,6 +371,7 @@
                     document.getElementById('thanks').style.display='inline';
                 },
                 error: function (err) {
+                    $("#loadingOverlay").hide();
                     console.error("Error submitting application:", err);
                     alert("There was an error submitting your application. Please try again.");
                 },

@@ -308,8 +308,10 @@
     </style>
 </head>
 
-<body
-    class="bg-light dark:bg-dark text-dark dark:text-white min-h-screen flex flex-col font-['Inter'] transition-colors duration-300"></body>
+<!-- <body
+    class="bg-light dark:bg-dark text-dark dark:text-white min-h-screen flex flex-col font-['Inter'] transition-colors duration-300"></body> -->
+    <body
+    class="bg-white dark:bg-black text-dark dark:text-white min-h-screen flex flex-col font-['Inter'] transition-colors duration-300"></body>
     <div id="white_logo"><img src="assets/Filmkaar_Logo.png" height="150px" width="150px" style="padding-left: 20px;"></div>
     <div style="display: none;" id="black_logo"><img src="assets/logo_black.png" height="150px" width="150px" style="padding-left: 20px;"></div>
     <div class="absolute top-8 right-8 z-10">
@@ -327,7 +329,7 @@
         <div class="text-center max-w-4xl mx-auto px-4">
             <h1
                 class="text-4xl md:text-6xl lg:text-7xl font-black mb-2 tracking-tighter leading-none text-shadow-glow-subtle">
-                <span >The Filmkaar Production</span>
+                <span >The Filmkaar</span>
             </h1>
             <p class="text-xl md:text-2xl font-semibold mb-8">
                 <span class="text-gray-600 dark:text-[#C9C9C9]">One Frame</span>
@@ -350,27 +352,27 @@
             </div>
         </div>
         <div class="chevron-down">
-            <i data-lucide="chevron-down" class="w-8 h-8"></i>
+            <i data-lucide="chevron-down" class="w-8 h-8 cursor-pointer" onclick="scrollDown()"></i>
         </div>
     </section>
 
-    <section id="about" class="section py-20 bg-gray-100 dark:bg-gray-900">
+    <section id="about" class="section py-20 bg-white dark:bg-black">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold mb-8 text-center font-semibold">About Filmkaar</h2>
             <div
                 class="flex flex-col md:flex-row items-center md:items-start justify-center space-y-8 md:space-y-0 md:space-x-12">
                 
                 <div class="max-w-2xl text-center md:text-left">
-                    <p class="about-text font-space-mono">
+                    <p class="about-text">
                         Hi there! 👋 At Filmkaar, we believe that stories have the power to inspire, provoke thought, and drive change. As a dedicated film production company, our passion lies in creating impactful short films that resonate with audiences from diverse backgrounds.
                     </p>
                     <br>
-                    <p class="about-text font-space-mono">
+                    <p class="about-text">
                         Most of our projects are short films designed to inspire reflection, spark meaningful conversations, and bring important narratives to the forefront. Our mission is rooted in the belief that by fostering a more inclusive society, we can ensure that everyone’s stories are heard, valued, and empowered.
                     </p>
                     <br>
 
-                    <p class="about-text font-space-mono">
+                    <p class="about-text">
                         We are committed to uncovering untold stories, advocating for equality, and using film as a catalyst for social change. At Filmkaar, we don’t just create films—we create movements, one frame at a time. <br><br>Join us in shaping a future filled with inspiration and positivity.
                     </p>
 
@@ -420,7 +422,7 @@
 
     <!-- Projects Section -->
 
-    <section id="projects" class="section py-20 bg-gray-100 dark:bg-gray-900">
+    <section id="projects" class="section py-20 bg-white dark:bg-black">
         <div class="container mx-auto px-4 max-w-6xl projects-container">
             <h2 class="text-3xl font-bold mb-12 text-center font-space-mono">Our Projects</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -430,11 +432,29 @@
     </section>
 
 </main>
-<footer class="w-full py-4 border-t border-gray-300 dark:border-gray-700">
-        <p class="text-right font-space-mono text-sm uppercase cursor-pointer footer-text" style="padding-right: 20px;">
-            Designed and Developed with ❤️ by <a href="https://www.linkedin.com/in/tanishqrawat17/" target="_blank"><u>Tanishq Rawat</u></a>
-        </p>
-    </footer>
+
+    <footer class="bg-white rounded-lg shadow-sm m-4 dark:bg-black">
+        <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+          <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025 <a href="http://thefilmkaarproduction.com/" class="hover:underline">The Filmkaar Production™</a> All Rights Reserved.</span>
+          
+          <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+            <li>
+              <a href="https://www.youtube.com/@thefilmkaarproduction" class="hover:underline me-4 md:me-6">YouTube</a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/the_filmkaar/" class="hover:underline me-4 md:me-6">Instagram</a>
+            </li>
+            <li>
+              <a href="https://thefilmkaarproduction.com/careers.html" class="hover:underline">Careers</a>
+            </li>
+          </ul>
+        </div>
+      
+        <div class="w-full text-center mt-4 text-sm text-gray-500 dark:text-gray-400">
+          <span>Designed & Developed with ❤️ by <a href="https://www.linkedin.com/in/tanishqrawat17/" class="hover:underline">Tanishq Rawat</a></span>
+        </div>
+      </footer>
+
 <script>
     tailwind.config = {
         darkMode: 'class',
@@ -453,6 +473,13 @@
 <body
     class="bg-light dark:bg-dark text-dark dark:text-white min-h-screen flex flex-col font-['Inter'] transition-colors duration-300">
     <script>
+
+        function scrollDown() {
+                window.scrollBy({
+                    top: window.innerHeight*1.25, 
+                    behavior: 'smooth', 
+                });
+            }
 
         lucide.createIcons();
 

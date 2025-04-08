@@ -1,0 +1,282 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=EB+Garamond:ital@0;1&family=Space+Mono&display=swap');
+
+.text-shadow-glow-subtle {
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.419);
+}
+
+.font-garamond {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+}
+
+.nav-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .nav-container {
+        gap: 2rem;
+    }
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #000000;
+}
+
+.dark .nav-link:hover {
+    color: #ffffff;
+}
+
+.tech-icon {
+    width: 64px;
+    height: 64px;
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.tech-icon {
+    filter: invert(0.4);
+}
+
+.tech-icon:hover {
+    filter: invert(0);
+    transform: scale(1.5);
+}
+
+.dark .tech-icon:hover {
+    filter: invert(1);
+    transform: scale(1.5);
+}
+
+.dark .tech-icon:hover {
+    filter: invert(1);
+}
+
+.squircle {
+    width: 256px;
+    height: 260px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (min-width: 740px) {
+    .nav-container {
+        display: grid;
+        grid-template-columns: repeat(6, auto);
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .squircle {
+        width: 260px;
+        height: 260px;
+    }
+}
+
+.font-space-mono {
+    font-family: 'Space Mono', monospace;
+}
+
+.footer-text {
+    transition: letter-spacing 0.8s ease;
+}
+
+.footer-text:hover {
+    letter-spacing: 4px;
+}
+
+.button {
+    font-size: 17px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 980px;
+    transition: all 0.3s ease;
+}
+
+.button-filled {
+    background-color: #ff8c00;
+    color: #000000;
+}
+
+.button-filled:hover {
+    transform: scale(1.15);
+}
+
+.button-outlined {
+    background-color: #007AFF;
+    border: 2px solid #007AFF;
+    color: #FFFFFF;
+}
+
+.button-outlined:hover {
+    transform: scale(1.15);
+}
+
+.chevron-down {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    40% {
+        transform: translateX(-50%) translateY(-20px);
+    }
+
+    60% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+.about-text {
+    font-size: 15px;
+}
+
+@media (min-width: 768px) {
+    .about-text {
+        font-size: 19px;
+    }
+}
+
+.rdk-hover {
+    text-decoration: underline;
+    cursor: pointer;
+    position: relative;
+}
+
+.rdk-hover::after {
+    content: "What is RDK-B?";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #147eff;
+    color: #282232;
+    padding: 4px 8px;
+    border-radius: 7px;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.rdk-hover:hover::after {
+    opacity: 1;
+}
+
+.project-thumbnail {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    aspect-ratio: 2 / 1;
+}
+
+.project-thumbnail:hover {
+    transform: scale(1.05);
+}
+
+.project-thumbnail:hover .redirect-icon {
+    opacity: 1;
+}
+
+.redirect-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.redirect-icon svg {
+    color: white;
+    width: 2rem;
+    height: 2rem;
+}
+
+.read-more {
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    text-decoration: underline;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 640px) {
+    .projects-container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    .project-tile {
+        margin-bottom: 1rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
+
+    }
+}
+
+.repo-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.repo-action {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: #718096;
+    transition: color 0.3s ease;
+}
+
+.repo-action:hover {
+    color: #2d3748;
+}
+
+.dark .repo-action:hover {
+    color: #e2e8f0;
+}

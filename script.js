@@ -105,7 +105,7 @@ function createProjectTiles() {
     const projectsContainer = document.querySelector('#projects .grid');
     
     $.ajax({
-        url: "http://127.0.0.1:5000/projects",
+        url: "https://thefilmkaar.pythonanywhere.com/projects",
         type: "post",
         success: function(response) {
             console.log(response);

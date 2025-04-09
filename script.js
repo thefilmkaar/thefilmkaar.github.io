@@ -98,70 +98,48 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Project data
-const projects = [
-    {
-        title: "Kaaya",
-        description: "Kaaya, a 21-year-old girl with vitiligo, faces loneliness and rejection due to her skin condition. Despite financial constraints, her father agrees to provide a sizable dowry for her marriage. The story highlights the emotional impact of societal judgments and the resilience of a young woman facing adversity.",
-        url: "https://youtu.be/1ZKeYzCQv7c?si=vqw9diwmCMK0Xuhx",
-        image: "assets/kaaya.jpg"
-    },
-    {
-        title: "Radio",
-        description: "A young woman arrives in a remote village for a survey, only to uncover a terrifying truth hidden within a mysterious radio. Its eerie music mirrors her life, leading her down a path of no return.  Prepare for a spine-chilling journey into the unknown!",
-        url: "https://youtu.be/XlaiCc6erAw?si=0Wx9BiQa6KTh5cgd",
-        image: "assets/radio.jpg"
-    },
-    {
-        title: "Ek Cup Chai",
-        description: "A seemingly insignificant argument threatens to tear a loving family apart. When their daughter's health is at stake, a couple must confront their own pride and rediscover the strength of their love in the face of adversity. Can they overcome their differences and find their way back to each other?",
-        url: "https://youtu.be/gT1SC82uGFM?si=57abbi-O9i_hBIsC",
-        image: "assets/ekCupChai.jpg"
-    },
-    {
-        title: "Pyaas - The Mid Night Thirst",
-        description: "Experience the chilling horror story of Pyaas The Midnight Thirst, filled with suspense and terror. Watch now for a spine-tingling thrill! Experience the chilling horror story of \"Pyaas - The Midnight Thirst.\" This short film will leave you on the edge of your seat!A young man's night takes a terrifying turn when he realizes he's trapped in his own home, haunted by a mysterious force that controls the water supply. Can he survive the night?",
-        url: "https://youtu.be/SdTgc7oMQxU?si=SYSJtpbRndiUPVZQ",
-        image: "assets/pyaas.jpg"
-    },
-    {
-        title: "Mayank ke Lag gaye",
-        description: "Presenting MAYANK ke Lagaye... 💐 A comedy short film full of emotions, laughs, and heartwarming moments! 🥰 Get ready to dive into the quirky world of The Filmkaar! 🎬✨  ",
-        url: "https://youtu.be/mm659tWcdsM?si=PzD-pKrgeNGYKA66",
-        image: "assets/mayank.jpg"
-    },
-    {
-        title: "Types of people at Chai Tapri",
-        description: "From the daily udaari's to curious reporters, everyone has a story to tell at a chai tapri. Let's explore the diverse personalities and interesting conversations at this vibrant spot.",
-        url: "https://youtu.be/NJMAp4esgUg?si=cWCJY24hox324dP1",
-        image: "assets/ChaiTapri.jpg"
-    }
-];
 
 
 // Function to create project tiles
 function createProjectTiles() {
     const projectsContainer = document.querySelector('#projects .grid');
-    projects.forEach(project => {
-        const tile = document.createElement('div');
-        tile.className = 'project-tile';
-        tile.innerHTML = `
-            <div class="project-thumbnail mb-4">
-                <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover">
-                <div class="redirect-icon">
-                    <i data-lucide="external-link"></i>
-                </div>
-            </div>
-            <h3 class="text-xl font-bold mb-2">${project.title}</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">${project.description}</p>
-            <a href="${project.url}" target="_blank" class="read-more">
-                <i data-lucide="youtube"></i>
-                Watch now
-            </a>
-        `;
-        const thumbnail = tile.querySelector('.project-thumbnail');
-        thumbnail.addEventListener('click', () => window.open(project.url, '_blank'));
-        projectsContainer.appendChild(tile);
+    
+    $.ajax({
+        url: "http://127.0.0.1:5000/projects",
+        type: "post",
+        success: function(response) {
+            console.log(response);
+            const projects = response['projects'];
+
+            projects.forEach(project => {
+                const tile = document.createElement('div');
+                tile.className = 'project-tile';
+                tile.innerHTML = `
+                    <div class="project-thumbnail mb-4">
+                        <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover">
+                        <div class="redirect-icon">
+                            <i data-lucide="external-link"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">${project.title}</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">${project.description}</p>
+                    <a href="${project.url}" target="_blank" class="read-more">
+                        <i data-lucide="youtube"></i>
+                        Watch now
+                    </a>
+                `;
+                const thumbnail = tile.querySelector('.project-thumbnail');
+                thumbnail.addEventListener('click', () => window.open(project.url, '_blank'));
+                projectsContainer.appendChild(tile);
+            });
+
+            lucide.createIcons();  // Re-render icons after elements are added
+        },
+        error: function(response) {
+            alert("Unable to load projects, please try again later");
+            console.log(response);
+        }
     });
-    lucide.createIcons();
 }
+
 createProjectTiles();

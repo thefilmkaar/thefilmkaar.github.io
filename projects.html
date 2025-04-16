@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects | The Filmkaar Production</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen p-6">
+
+  <div class="max-w-5xl mx-auto space-y-10">
+    <h1 class="text-4xl font-bold text-center">All Projects — The Filmkaar Production -- Internal Use</h1>
+    <!-- Projects Tile Container -->
+    <div id="projectList" class="space-y-6"></div>
+
+    <!-- Project Edit Form -->
+    <form id="editForm" class="hidden bg-gray-800 p-6 rounded-lg shadow-lg space-y-6" enctype="multipart/form-data">
+      <h2 class="text-2xl font-bold text-center">Edit Project</h2>
+      <!-- Thumbnail Preview -->
+      <input type="hidden" id="projectId" name="projectId">
+
+      <div>
+        <label for="title" class="block mb-1 font-medium">Project Name</label>
+        <input type="text" id="title" name="title" required
+          class="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 text-white">
+      </div>
+
+      <div>
+        <label for="description" class="block mb-1 font-medium">Description</label>
+        <textarea id="description" name="description" rows="10" required
+            class="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 text-white"></textarea>
+      </div>
+
+      <div>
+        <label for="url" class="block mb-1 font-medium">YouTube URL</label>
+        <input type="url" id="url" name="url" required
+          class="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 text-white" readonly>
+      </div>
+
+      <div>
+        <label for="imageFile" class="block mb-1 font-medium">Upload New Thumbnail</label>
+        <input type="file" id="imageFile" name="imageFile" accept="image/*"
+          class="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 text-white">
+      </div>
+
+      <div>
+        <label for="password" class="block mb-1 font-medium">Password</label>
+        <input type="password" id="password" name="password" required
+          class="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring focus:ring-indigo-500">
+      </div>
+
+      <div class="flex gap-4">
+        <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded text-white font-bold">
+          Save Project
+        </button>
+        <button type="button" id="cancelBtn"
+          class="flex-1 bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white font-bold">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function createTile(project, index) {
+      return $(`
+        <div class="projectTile flex gap-4 bg-gray-800 p-4 rounded-lg hover:bg-gray-700 cursor-pointer"
+          data-title="${project.title}"
+          data-description="${project.description}"
+          data-url="${project.url}"
+          data-image="${project.image}">  <!-- This line is crucial -->
+          <img src="${project.image}" alt="${project.title}" class="w-32 h-20 object-cover rounded-lg">
+          <div>
+            <h2 class="text-xl font-semibold">${project.title}</h2>
+            <p class="text-sm text-gray-300 line-clamp-2">${project.description}</p>
+            <p class="text-xs text-indigo-400 mt-1">${project.url}</p>
+          </div>
+        </div>
+      `);
+    }
+
+    // Fetch and display projects
+    $(document).ready(function () {
+      $.ajax({
+        url: 'https://thefilmkaarproduction.com/get-all-projects',
+        method: 'GET',
+        success: function (projects) {
+          projects.forEach((project, index) => {
+            const tile = createTile(project, index);
+            $('#projectList').append(tile);
+          });
+        },
+        error: function (err) {
+          console.error('Error fetching projects:', err);
+        }
+      });
+    });
+
+    // Click on tile to edit
+    $('#projectList').on('click', '.projectTile', function () {
+      const $tile = $(this);
+      $('#projectId').val($tile.data('id'));
+      $('#title').val($tile.data('title'));
+      $('#description').val($tile.data('description'));
+      $('#url').val($tile.data('url'));
+      $('#imageFile').val(''); // Clear file input
+      $('#editForm').removeClass('hidden');
+      $('#projectList').hide();
+      $('#addNewBtn').hide();
+      $('html, body').animate({ scrollTop: $("#editForm").offset().top }, 500);
+    });
+
+    // Add new project
+    $('#addNewBtn').on('click', function () {
+      $('#editForm')[0].reset();
+      $('#projectId').val('');
+      $('#editForm').removeClass('hidden');
+      $('#projectList').hide();
+      $(this).hide();
+      $('html, body').animate({ scrollTop: $("#editForm").offset().top }, 500);
+    });
+
+    // Cancel editing/adding
+    $('#cancelBtn').on('click', function () {
+      $('#editForm').addClass('hidden');
+      $('#editForm')[0].reset();
+      $('#projectList').show();
+      $('#addNewBtn').show();
+    });
+
+    // Submit form with file upload
+    $('#editForm').on('submit', function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      $.ajax({
+        url: 'https://thefilmkaarproduction.com/update-project',
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function () {
+          alert('Project saved!');
+          location.reload();
+        },
+        error: function (err) {
+          console.error('Error saving project:', err);
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

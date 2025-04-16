@@ -87,7 +87,8 @@
       $.ajax({
         url: 'https://thefilmkaar.pythonanywhere.com/get-all-projects',
         method: 'GET',
-        success: function (projects) {
+        success: function (response) {
+          let projects = response['projects']
           projects.forEach((project, index) => {
             const tile = createTile(project, index);
             $('#projectList').append(tile);

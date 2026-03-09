@@ -383,7 +383,8 @@
             const acting = document.querySelector('input[name="acting"]:checked') ? document.querySelector('input[name="acting"]:checked').value : '';
             const actingTypes = Array.from(document.querySelectorAll('input[name="acting_types[]"]:checked')).map(cb => cb.value);
             const social = document.getElementById('social').value.trim();
-            const resume = document.getElementById('resume').files[0];
+            const photosFiles = document.getElementById('photos') ? document.getElementById('photos').files : [];
+            const introVideo = document.getElementById('introVideo') ? document.getElementById('introVideo').files[0] : null;
             const portfolio = document.getElementById('portfolio').value.trim();
             const work = document.getElementById('sampleWork').value.trim();
 
@@ -449,8 +450,14 @@
 
             // Social link is optional; no validation required
 
-            if (!resume) {
-                alert("Please upload your resume.");
+            // Require at least one photo or an intro video
+            if ((photosFiles.length === 0 || photosFiles === undefined) && !introVideo) {
+                alert("Please upload at least one photo or an intro video (30 seconds).");
+                return;
+            }
+
+            if (photosFiles && photosFiles.length > 5) {
+                alert("You can upload a maximum of 5 photos.");
                 return;
             }
 
@@ -467,7 +474,14 @@
             formData.append("acting_experience", acting);
             formData.append("acting_types", JSON.stringify(actingTypes));
             if (social.length > 0) { formData.append("social", social); }
-            formData.append("resume", resume);
+            // Append photos
+            if (photosFiles && photosFiles.length > 0) {
+                for (let i = 0; i < photosFiles.length; i++) {
+                    formData.append('photos[]', photosFiles[i]);
+                }
+            }
+            // Append intro video if provided
+            if (introVideo) { formData.append('introVideo', introVideo); }
             formData.append("jobId",document.getElementById('j_id').innerHTML);
 
             if (portfolio.length>0) {
@@ -582,7 +596,7 @@
                     <label><input type="radio" name="acting" value="No" required> No</label>
                 </div>
 
-                <label for="actingTypes">Years of Acting Experience *</label>
+                <label for="actingTypes">Years of Acting Experience in *</label>
                 <div id="actingTypes">
                     <label><input type="checkbox" name="acting_types[]" value="Short Films"> Short Films</label>
                     <label><input type="checkbox" name="acting_types[]" value="Theatre"> Theatre</label>
@@ -600,8 +614,11 @@
                 <label for="sampleWork">Sample Work Link (Optional)</label>
                 <input type="text" id="sampleWork" name="sampleWork" required>
 
-                <label for="resume">Upload Resume *</label>
-                <input type="file" id="resume" name="resume" required>
+                <label for="photos">Upload Photos (up to 5)</label>
+                <input type="file" id="photos" name="photos[]" accept="image/*" multiple>
+
+                <label for="introVideo">Upload Intro Video (30 Seconds, Optional)</label>
+                <input type="file" id="introVideo" name="introVideo" accept="video/*">
 
                 <button type="button" onClick="validate()">Submit Application</button>
             </form>

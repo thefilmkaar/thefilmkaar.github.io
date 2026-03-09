@@ -183,34 +183,7 @@
             background-color: #3700b3;
         }
 
-        #genres {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background-color: #333333;
-            border-radius: 5px;
-        }
-
-        #genres label {
-            font-size: 16px;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #genres input[type="checkbox"] {
-            width: auto;
-            margin: 0;
-        }
-
-        #other-genre {
-            margin-top: 5px;
-            padding: 5px;
-            font-size: 14px;
-            color: #000;
-            background-color: #ffffff;
-        }
+        /* Preferred genres removed from form; related styles omitted */
 
         #experience {
             display: flex;
@@ -231,6 +204,105 @@
         }
 
         #experience input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+
+        /* Make location radios match experience radios */
+        #location {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 15px;
+            background-color: #333333;
+            padding: 2px;
+            border-radius: 5px;
+        }
+
+        #location label {
+            font-size: 16px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #location input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+
+        /* Make languages checkbox group match experience layout */
+        #languages {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 15px;
+            background-color: #333333;
+            padding: 2px;
+            border-radius: 5px;
+            align-items: center;
+        }
+
+        #languages label {
+            font-size: 16px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #languages input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        /* Make acting radios match experience radios */
+        #acting {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 15px;
+            background-color: #333333;
+            padding: 2px;
+            border-radius: 5px;
+            align-items: center;
+        }
+
+        #acting label {
+            font-size: 16px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #acting input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+
+        /* Make acting experience types checkboxes match experience layout */
+        #actingTypes {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 15px;
+            background-color: #333333;
+            padding: 2px;
+            border-radius: 5px;
+            align-items: center;
+        }
+
+        #actingTypes label {
+            font-size: 16px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #actingTypes input[type="checkbox"] {
             width: auto;
             margin: 0;
         }
@@ -301,17 +373,20 @@
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
+            const age = document.getElementById('age') ? document.getElementById('age').value.trim() : '';
+            const height = document.getElementById('height') ? document.getElementById('height').value.trim() : '';
+            const weight = document.getElementById('weight') ? document.getElementById('weight').value.trim() : '';
             const experience = document.querySelector('input[name="experience"]:checked').value;
+            const location = document.querySelector('input[name="location"]:checked') ? document.querySelector('input[name="location"]:checked').value : '';
+            const languages = Array.from(document.querySelectorAll('input[name="languages[]"]:checked')).map(cb => cb.value);
+            const otherLanguage = document.getElementById('other-language') ? document.getElementById('other-language').value.trim() : '';
+            const acting = document.querySelector('input[name="acting"]:checked') ? document.querySelector('input[name="acting"]:checked').value : '';
+            const actingTypes = Array.from(document.querySelectorAll('input[name="acting_types[]"]:checked')).map(cb => cb.value);
             const social = document.getElementById('social').value.trim();
             const resume = document.getElementById('resume').files[0];
-            const genres = Array.from(document.querySelectorAll('input[name="genres[]"]:checked')).map(
-                (checkbox) => checkbox.value
-            );
-            const otherGenre = document.getElementById('other-genre').value.trim();
             const portfolio = document.getElementById('portfolio').value.trim();
             const work = document.getElementById('sampleWork').value.trim();
 
-            if (otherGenre) genres.push(otherGenre);
 
             if (name === "") {
                 alert("Please enter your full name.");
@@ -335,15 +410,44 @@
                 return;
             }
 
-            if (genres.length === 0) {
-                alert("Please select at least one preferred genre.");
+            if (location === '') {
+                alert("Please select whether you're based in Ujjain/Indore or willing to travel.");
                 return;
             }
 
-            if (social === "") {
-                alert("Please provide a link to your social platform profile.");
+            if (languages.length === 0 && otherLanguage === '') {
+                alert("Please select at least one language or specify another language.");
                 return;
             }
+
+            if (otherLanguage) languages.push(otherLanguage);
+
+            if (acting === '') {
+                alert("Please indicate whether you have acting experience.");
+                return;
+            }
+
+            if (actingTypes.length === 0) {
+                alert("Please select at least one option for Years of Acting Experience.");
+                return;
+            }
+
+            if (age === "" || !/^[0-9]+$/.test(age)) {
+                alert("Please enter a valid age.");
+                return;
+            }
+
+            if (height === "") {
+                alert("Please enter your height.");
+                return;
+            }
+
+            if (weight === "" || !/^[0-9]+(\.[0-9]+)?$/.test(weight)) {
+                alert("Please enter a valid weight (numbers only).");
+                return;
+            }
+
+            // Social link is optional; no validation required
 
             if (!resume) {
                 alert("Please upload your resume.");
@@ -354,9 +458,15 @@
             formData.append("name", name);
             formData.append("email", email);
             formData.append("phone", phone);
+            formData.append("age", age);
+            formData.append("height", height);
+            formData.append("weight", weight);
             formData.append("experience", experience);
-            formData.append("social", social);
-            formData.append("genres", JSON.stringify(genres));
+            formData.append("location", location);
+            formData.append("languages", JSON.stringify(languages));
+            formData.append("acting_experience", acting);
+            formData.append("acting_types", JSON.stringify(actingTypes));
+            if (social.length > 0) { formData.append("social", social); }
             formData.append("resume", resume);
             formData.append("jobId",document.getElementById('j_id').innerHTML);
 
@@ -436,18 +546,14 @@
                 <label for="phone">Phone Number *</label>
                 <input type="text" id="phone" name="phone" required>
 
+                <label for="age">Age *</label>
+                <input type="number" id="age" name="age" min="0" placeholder="Age in years" required>
 
-                <div id="genres" style="display: flex; flex-direction: column;">
-                    <label for="genres">Preferred Genres *</label>
-                    <label><input type="checkbox" name="genres[]" value="Drama"> Drama</label>
-                    <label><input type="checkbox" name="genres[]" value="Comedy"> Comedy</label>
-                    <label><input type="checkbox" name="genres[]" value="Thriller"> Thriller</label>
-                    <label><input type="checkbox" name="genres[]" value="Horror"> Horror</label>
-                    <label><input type="checkbox" name="genres[]" value="Sci-Fi"> Sci-Fi</label>
-                    <label><input type="checkbox" name="genres[]" value="Other"> Other (Please specify)</label>
-                    <input type="text" id="other-genre" name="other_genre" placeholder="Specify if 'Other'"
-                        style="margin-top: 5px;">
-                </div>
+                <label for="height">Height *</label>
+                <input type="text" id="height" name="height" placeholder="Height (e.g. 5'9)" required>
+
+                <label for="weight">Weight *</label>
+                <input type="number" step="0.1" id="weight" name="weight" placeholder="Weight (kg)" required>
 
                 <label for="experience">Experience Level *</label>
                 <div id="experience">
@@ -456,11 +562,40 @@
                     <label><input type="radio" name="experience" value="Expert" required> Expert</label>
                 </div>
 
+                <label for="location">Are you based in Ujjain / Indore or willing to travel? *</label>
+                <div id="location">
+                    <label><input type="radio" name="location" value="Ujjain" required> Ujjain</label>
+                    <label><input type="radio" name="location" value="Indore" required> Indore</label>
+                    <label><input type="radio" name="location" value="Willing to travel" required> Willing to travel</label>
+                </div>
+
+                <label for="languages">Languages Known *</label>
+                <div id="languages">
+                    <label><input type="checkbox" name="languages[]" value="Hindi"> Hindi</label>
+                    <label><input type="checkbox" name="languages[]" value="English"> English</label>
+                    <label><input type="checkbox" name="languages[]" value="Other"> Other</label>
+                </div>
+
+                <label for="acting">Do you have acting experience? *</label>
+                <div id="acting">
+                    <label><input type="radio" name="acting" value="Yes" required> Yes</label>
+                    <label><input type="radio" name="acting" value="No" required> No</label>
+                </div>
+
+                <label for="actingTypes">Years of Acting Experience *</label>
+                <div id="actingTypes">
+                    <label><input type="checkbox" name="acting_types[]" value="Short Films"> Short Films</label>
+                    <label><input type="checkbox" name="acting_types[]" value="Theatre"> Theatre</label>
+                    <label><input type="checkbox" name="acting_types[]" value="Web Series"> Web Series</label>
+                    <label><input type="checkbox" name="acting_types[]" value="Modeling"> Modeling</label>
+                    <label><input type="checkbox" name="acting_types[]" value="No Experience"> No Experience</label>
+                </div>
+
                 <label for="portfolio">Portfolio Link (Optional)</label>
                 <input type="text" id="portfolio" name="portfolio" required>
 
-                <label for="social">Social Platform Link (LinkedIn/Instagram) *</label>
-                <input type="text" id="social" name="social" required>
+                <label for="social">Social Platform Link (LinkedIn/Instagram)</label>
+                <input type="text" id="social" name="social">
 
                 <label for="sampleWork">Sample Work Link (Optional)</label>
                 <input type="text" id="sampleWork" name="sampleWork" required>

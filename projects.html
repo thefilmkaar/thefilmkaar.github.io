@@ -141,7 +141,7 @@
       // Fetch and display projects
       $(document).ready(function () {
         $.ajax({
-          url: "https://thefilmkaar.pythonanywhere.com/get-all-projects",
+          url: "https://filmkaar.fastapicloud.dev/get-all-projects",
           method: "GET",
           success: function (response) {
             let projects = response["projects"];
@@ -200,7 +200,7 @@
 
         const formData = new FormData(this);
         $.ajax({
-          url: "https://thefilmkaar.pythonanywhere.com/update-project",
+          url: "https://filmkaar.fastapicloud.dev/update-project",
           method: "POST",
           data: formData,
           processData: false,

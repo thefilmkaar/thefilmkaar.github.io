@@ -434,7 +434,7 @@ function startHeroSlider(slider, heroSlides) {
 // Fetch projects once and populate both the hero slider and the projects grid
 function loadProjects() {
     $.ajax({
-        url: "http://filmkaar.fastapicloud.dev/projects",
+        url: "https://filmkaar.fastapicloud.dev/projects",
         type: "post",
         success: function(response) {
             console.log(response);

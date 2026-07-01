@@ -4,6 +4,226 @@
     text-shadow: 0 0 12px rgba(255, 255, 255, 0.419);
 }
 
+/* ===== Hero section height ===== */
+.hero-section {
+    min-height: 100vh;
+    background-color: #000;
+}
+
+/* On mobile the poster is shown whole (see .hero-slide-img contain below);
+   the section height is set from the real image size in JS so the poster
+   fills the width with no crop and content/sections sit right below it. */
+@media (max-width: 767px) {
+    .hero-section {
+        /* Fallback until JS measures the poster and sets an exact height.
+           JS clears this min-height once it applies the fitted height. */
+        min-height: 60vh;
+    }
+}
+
+/* ===== Hero background poster slider ===== */
+.hero-slider {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity 2s ease-in-out;
+    will-change: opacity, transform;
+}
+
+/* The two stacked layers that make up a slide. On desktop only the sharp
+   cover layer shows; on mobile the blurred backdrop fills the letterbox gaps. */
+.hero-slide-blur,
+.hero-slide-img {
+    position: absolute;
+    inset: 0;
+    background-image: var(--bg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.hero-slide-blur {
+    display: none;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    animation: heroKenBurns 9s linear forwards;
+}
+
+.hero-slide.active:nth-child(even) {
+    animation-name: heroKenBurnsAlt;
+}
+
+@keyframes heroKenBurns {
+    from {
+        transform: scale(1.04) translate(0, 0);
+    }
+
+    to {
+        transform: scale(1.16) translate(-1.5%, -1.5%);
+    }
+}
+
+@keyframes heroKenBurnsAlt {
+    from {
+        transform: scale(1.16) translate(1.5%, 1%);
+    }
+
+    to {
+        transform: scale(1.04) translate(0, 0);
+    }
+}
+
+/* Netflix-style scrim: dark on the left (behind the text) fading right,
+   plus a bottom fade so the poster blends into the page below. */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        linear-gradient(90deg,
+            rgba(0, 0, 0, 0.85) 0%,
+            rgba(0, 0, 0, 0.55) 35%,
+            rgba(0, 0, 0, 0.1) 70%,
+            rgba(0, 0, 0, 0) 100%),
+        linear-gradient(180deg,
+            rgba(0, 0, 0, 0.4) 0%,
+            rgba(0, 0, 0, 0) 25%,
+            rgba(0, 0, 0, 0) 60%,
+            rgba(0, 0, 0, 0.75) 100%);
+}
+
+/* ===== Single transparent top navbar over the hero ===== */
+.site-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+}
+
+.site-nav-brand {
+    display: inline-flex;
+    align-items: center;
+}
+
+.site-nav-brand img {
+    height: 56px;
+    width: auto;
+    display: block;
+}
+
+/* Keep the navbar controls readable (white) over the dark poster scrim */
+.site-nav a,
+.site-nav button,
+.site-nav svg,
+.site-nav span {
+    color: #ffffff;
+}
+
+.site-nav-actions a:hover,
+.site-nav-actions button:hover {
+    color: #d1d1d1;
+}
+
+/* Force hero text to read white over the poster scrim in both themes */
+.hero-content h2,
+.hero-content h2 span {
+    color: #ffffff;
+}
+
+.hero-content {
+    max-width: 40rem;
+    text-align: left;
+    padding-left: 3rem;
+    padding-right: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+.hero-content .hero-description {
+    color: #e5e5e5;
+    max-width: 34rem;
+    line-height: 1.6;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 767px) {
+
+    /* Stack the poster and the text vertically instead of overlaying, so the
+       whole poster shows and the text/sections flow right below it.
+       .hero-section.flex beats Tailwind's runtime-injected .flex rule. */
+    .hero-section.flex {
+        display: block;
+        min-height: 0;
+        height: auto;
+    }
+
+    /* Poster sits at the top; JS sets its height to fit the whole image. */
+    .hero-slider {
+        position: relative;
+        width: 100%;
+        min-height: 56vw;  /* fallback until JS measures the poster */
+    }
+
+    /* Show the whole poster (no center crop) on tall phone screens */
+    .hero-slide-img {
+        background-size: contain;
+    }
+
+    /* Keep the fitted poster exactly in frame — the Ken Burns zoom would
+       scale it up and crop the edges we just fitted, so hold it still. */
+    .hero-slide,
+    .hero-slide.active {
+        transform: none;
+        animation: none;
+    }
+
+    /* The scrim is only needed under overlaid text; here the text sits below
+       the poster on solid black, so it just dims the poster — drop it. */
+    .hero-overlay {
+        display: none;
+    }
+
+    /* Text/buttons flow in normal document order below the poster */
+    .hero-content {
+        position: static;
+        max-width: 100%;
+        padding: 1.5rem;
+    }
+
+    .site-nav {
+        padding: 0.75rem 1rem;
+    }
+
+    .site-nav-brand img {
+        height: 40px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-slide {
+        transform: none;
+    }
+
+    .hero-slide.active {
+        animation: none;
+        transform: none;
+    }
+}
+
 .font-garamond {
     font-family: 'EB Garamond', serif;
     font-style: italic;
@@ -132,6 +352,27 @@
     transform: scale(1.15);
 }
 
+/* ===== Netflix-style hero CTAs ===== */
+.button-play {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 10px 26px;
+}
+
+.button-play:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.button-info {
+    background-color: rgba(109, 109, 110, 0.7);
+    color: #ffffff;
+    padding: 10px 26px;
+}
+
+.button-info:hover {
+    background-color: rgba(109, 109, 110, 0.5);
+}
+
 .chevron-down {
     position: absolute;
     bottom: 20px;
@@ -243,6 +484,42 @@
     cursor: pointer;
 }
 
+/* Projects "Show More" toggle */
+.project-tile-hidden {
+    display: none;
+}
+
+.project-tile-hidden.project-tile-revealed {
+    display: block;
+}
+
+.projects-toggle-container.hidden {
+    display: none;
+}
+
+.projects-toggle-btn {
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+    padding: 0.75rem 2rem;
+    border: 2px solid currentColor;
+    border-radius: 9999px;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.projects-toggle-btn:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.dark .projects-toggle-btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+
 @media (max-width: 640px) {
     .projects-container {
         padding-left: 2rem;
@@ -255,6 +532,198 @@
         margin-right: 1rem;
 
     }
+}
+
+/* ===== Team section ===== */
+.team-subtitle {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Horizontal slider — a native scroll track with snap, so touch/swipe works
+   on phone and the arrow buttons drive it on desktop. */
+.team-slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.team-track {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.5rem 0.25rem 1.25rem;
+    scrollbar-width: none;              /* Firefox */
+}
+
+.team-track::-webkit-scrollbar {
+    display: none;                       /* Chrome/Safari */
+}
+
+/* Prev/next arrow buttons */
+.team-nav {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.9);
+    color: #111;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    z-index: 2;
+}
+
+.team-nav:hover {
+    transform: scale(1.1);
+}
+
+.dark .team-nav {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(20, 20, 20, 0.9);
+    color: #fff;
+}
+
+.team-nav svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.team-nav-hidden {
+    display: none;
+}
+
+/* On phones, float the arrows over the edges instead of taking column space */
+@media (max-width: 767px) {
+    .team-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .team-nav:hover {
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .team-nav-prev {
+        left: -0.25rem;
+    }
+
+    .team-nav-next {
+        right: -0.25rem;
+    }
+}
+
+.team-card {
+    flex: 0 0 auto;
+    width: 260px;
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    background: transparent;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    .team-card {
+        width: 280px;
+    }
+}
+
+.dark .team-card {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.team-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0, 0, 0, 0.25);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.dark .team-card:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.team-avatar {
+    width: 128px;
+    height: 128px;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+.dark .team-avatar {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.team-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+}
+
+.team-card:hover .team-avatar img {
+    filter: grayscale(0%);
+}
+
+.team-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.team-role {
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin-bottom: 1.25rem;
+}
+
+.dark .team-role {
+    color: #9ca3af;
+}
+
+.team-socials {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.team-socials a {
+    color: #6b7280;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.team-socials a:hover {
+    color: #000;
+    transform: scale(1.2);
+}
+
+.dark .team-socials a {
+    color: #9ca3af;
+}
+
+.dark .team-socials a:hover {
+    color: #fff;
+}
+
+.team-socials svg {
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
 .repo-actions {

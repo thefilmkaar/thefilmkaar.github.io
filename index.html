@@ -41,16 +41,16 @@
     <link rel="stylesheet" href="styles.css">
     <meta property="og:title" content="The Filmkaar Production - Indie Films & Horror Shorts" />
     <meta property="og:description" content="We craft spine-chilling horror short films using modern tools like iPhone 15 Pro." />
-    <meta property="og:image" content="https://thefilmkaarproduction.com/assets/Filmkaar_Logo.png" />
-    <meta property="og:url" content="https://thefilmkaarproduction.com" />
+    <meta property="og:image" content="https://filmkaar.fastapicloud.dev/assets/Filmkaar_Logo.png" />
+    <meta property="og:url" content="https://filmkaar.fastapicloud.dev" />
     <meta property="og:type" content="website" />
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "The Filmkaar Production",
-            "url": "https://thefilmkaarproduction.com",
-            "logo": "https://thefilmkaarproduction.com/assets/Filmkaar_Logo.png",
+            "url": "https://filmkaar.fastapicloud.dev",
+            "logo": "https://filmkaar.fastapicloud.dev/assets/Filmkaar_Logo.png",
             "sameAs": [
             "https://www.instagram.com/the_filmkaar/",
             "https://www.youtube.com/@thefilmkaarproduction"
@@ -64,50 +64,55 @@
 <body
     class="bg-white dark:bg-black text-dark dark:text-white min-h-screen flex flex-col font-['Inter'] transition-colors duration-300">
 </body>
-<div id="white_logo"><img src="assets/Filmkaar_Logo.png" height="150px" width="150px" style="padding-left: 20px;" alt="Logo"></div>
-<div style="display: none;" id="black_logo"><img src="assets/logo_black.png" height="150px" width="150px" style="padding-left: 20px;" alt="Logo"></div>
-
-<div class="absolute top-8 right-8 z-10 flex items-center space-x-4">
-    <a href="https://thefilmkaarproduction.com/careers" target="_blank" class="p-2 rounded-lg font-medium relative group">
-        <span class="md:hidden group-hover:text-gray-300 dark:group-hover:text-gray-700"> <i data-lucide="briefcase" class="w-6 h-6 text-black dark:text-white"></i></span>
-        <span class="hidden md:inline group-hover:text-gray-300 dark:group-hover:text-gray-700 text-black dark:text-white">Careers</span>
+<nav class="site-nav">
+    <a href="#" class="site-nav-brand" aria-label="The Filmkaar Production home">
+        <img id="siteLogo" src="assets/desktop.png" alt="The Filmkaar Production">
     </a>
-    <button id="themeToggle"
-        class="p-2 rounded-lg group relative">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-black dark:text-white group-hover:text-gray-300 dark:group-hover:text-gray-700">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
-    </button>
-</div>
+    <div class="site-nav-actions flex items-center space-x-4">
+        <a href="https://filmkaar.fastapicloud.dev/careers" target="_blank" class="p-2 rounded-lg font-medium relative group">
+            <span class="md:hidden"><i data-lucide="briefcase" class="w-6 h-6"></i></span>
+            <span class="hidden md:inline">Careers</span>
+        </a>
+        <button id="themeToggle" class="p-2 rounded-lg group relative">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+    </div>
+</nav>
 <main class="flex-grow flex flex-col">
-    <section class="flex items-center justify-center min-h-screen">
-        <div class="text-center max-w-4xl mx-auto px-4">
-            <h1
-                class="text-4xl md:text-6xl lg:text-7xl font-black mb-2 tracking-tighter leading-none text-shadow-glow-subtle">
-                <span>Filmkaar Production</span>
-            </h1>
-            <p class="text-xl md:text-2xl font-semibold mb-8">
-                <span class="text-gray-600 dark:text-[#C9C9C9]">One Frame</span>
-                <span class="bg-gradient-to-r from-[#9C83FF] to-[#FF9051] text-transparent bg-clip-text">at a
-                    time</span>
+    <section class="hero-section relative overflow-hidden flex items-end justify-start">
+        <div id="hero-slider" class="hero-slider">
+            <div class="hero-slide active" style="--bg: url('assets/Radio_Poster.jpg');">
+                <div class="hero-slide-blur"></div>
+                <div class="hero-slide-img"></div>
+            </div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content relative z-10">
+            <h2
+                class="text-3xl md:text-4xl lg:text-5xl font-black mb-4 tracking-tighter leading-none text-shadow-glow-subtle">
+                <span>Filmkaar</span>
+            </h2>
+            <p class="hero-description text-base md:text-lg mb-8">
+                We craft impactful short films that inspire reflection and spark meaningful
+                conversations — one frame at a time.
             </p>
 
-            <div class="flex justify-center space-x-4 mb-12">
+            <div class="flex space-x-4 mb-12">
                 <a href="https://www.youtube.com/@filmkaarproduction"
-                    class="button button-filled flex items-center space-x-2" target="_blank">
-                    <i data-lucide="YouTube" class="w-5 h-5"></i>
-                    <span>YouTube</span>
+                    class="button button-play flex items-center space-x-2" target="_blank">
+                    <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                    <span>Play</span>
                 </a>
-                <a href="https://www.instagram.com/filmkaarproduction/"
-                    class="button button-outlined flex items-center space-x-2" target="_blank">
-                    <i data-lucide="instagram" class="w-5 h-5"></i>
-                    <span>Instagram</span>
-
+                <a href="#about" class="button button-info flex items-center space-x-2">
+                    <i data-lucide="info" class="w-5 h-5"></i>
+                    <span>More Info</span>
                 </a>
             </div>
         </div>
-        <div class="chevron-down">
+        <div class="chevron-down z-10">
             <i data-lucide="chevron-down" class="w-8 h-8 cursor-pointer" onclick="scrollDown()"></i>
         </div>
     </section>
@@ -144,7 +149,6 @@
         </div>
     </section>
 
-
     <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="modal-content bg-white rounded-lg p-6 max-w-md w-full">
             <button id="close-modal" class="absolute top-2 right-2 text-gray-500 hover:text-black">
@@ -153,6 +157,41 @@
             <div id="modal-body"></div>
         </div>
     </div>
+
+    <!-- Projects Section -->
+
+    <section id="projects" class="section py-20 bg-white dark:bg-black">
+        <div class="container mx-auto px-4 max-w-6xl projects-container">
+            <h2 class="text-3xl font-bold mb-12 text-center font-space-mono">Our Films</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project tiles will be dynamically inserted here -->
+            </div>
+            <div class="text-center mt-12 projects-toggle-container hidden">
+                <button id="projects-toggle" class="projects-toggle-btn"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="section py-20 bg-white dark:bg-black">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <h2 class="text-3xl md:text-4xl font-bold mb-3 text-center font-space-mono">Our Artists</h2>
+            <p class="team-subtitle text-center text-gray-600 dark:text-gray-400 max-w-xl mx-auto mb-14">
+                We are a group of passionate people working together to bring stories to life — one frame at a time.
+            </p>
+            <div class="team-slider">
+                <button class="team-nav team-nav-prev" aria-label="Previous team members">
+                    <i data-lucide="chevron-left"></i>
+                </button>
+                <div class="team-track">
+                    <!-- Team member cards will be dynamically inserted here -->
+                </div>
+                <button class="team-nav team-nav-next" aria-label="Next team members">
+                    <i data-lucide="chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
 
     <!-- Navigation Links Section -->
     <section id="links" class="section py-16">
@@ -174,7 +213,7 @@
                     <i data-lucide="linkedin" class="w-6 h-6"></i>
                     LinkedIn
                 </a>
-                <a href="https://thefilmkaarproduction.com/careers"
+                <a href="https://filmkaar.fastapicloud.dev/careers"
                     class="nav-link text-xl md:text-2xl text-gray-600 dark:text-gray-400 font-bold" target="_blank">
                     <i data-lucide="file-text" class="w-6 h-6"></i>
                     Careers
@@ -185,17 +224,6 @@
                     Contact
                 </a>
             </nav>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-
-    <section id="projects" class="section py-20 bg-white dark:bg-black">
-        <div class="container mx-auto px-4 max-w-6xl projects-container">
-            <h2 class="text-3xl font-bold mb-12 text-center font-space-mono">Our Projects</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project tiles will be dynamically inserted here -->
-            </div>
         </div>
     </section>
 
@@ -216,7 +244,7 @@
                 <a href="https://www.instagram.com/the_filmkaar/" class="hover:underline me-4 md:me-6">Instagram</a>
             </li>
             <li>
-                <a href="https://thefilmkaarproduction.com/careers" class="hover:underline">Careers</a>
+                <a href="https://filmkaar.fastapicloud.dev/careers" class="hover:underline">Careers</a>
             </li>
         </ul>
     </div>

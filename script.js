@@ -318,19 +318,21 @@ function setupProjectsToggle(totalCount) {
 }
 
 // Build the hero background poster slider from project images
+const POSTER_API_BASE = 'https://filmkaar.fastapicloud.dev/poster/';
+// const POSTER_API_BASE = 'http://localhost:8000/poster/';
+
 function buildHeroSlider(projects) {
     const slider = document.getElementById('hero-slider');
     if (!slider) return;
 
-    // Every project uses the same hero poster; only the title rotates.
-    const HERO_POSTER = 'assets/Radio_Poster.jpg';
+    // Each project with its own poster gets a slide with a matching title.
     const seen = new Set();
     const heroProjects = [];
     projects.forEach(project => {
-        const title = project.title || '';
-        if (!seen.has(title)) {
+        const title = (project.title || '').trim();
+        if (project.poster && !seen.has(title)) {
             seen.add(title);
-            heroProjects.push({ src: HERO_POSTER, title });
+            heroProjects.push({ src: POSTER_API_BASE + encodeURIComponent(project.poster), title });
         }
     });
     const heroSlides = heroProjects.slice(0, 6);

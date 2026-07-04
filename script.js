@@ -46,57 +46,7 @@ function revealSections() {
 window.addEventListener('scroll', revealSections);
 window.addEventListener('load', revealSections);
 
-const themeToggle = document.getElementById('themeToggle');
-const html = document.documentElement;
-
-// Function to set the theme
-function setTheme(isDark) {
-    if (isDark) {
-        html.classList.add('dark');
-    } else {
-        html.classList.remove('dark');
-    }
-    updateIcon(isDark);
-    localStorage.setItem('darkMode', isDark);
-}
-
-// Function to update the icon
-function updateIcon(isDark) {
-    themeToggle.innerHTML = isDark
-        ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>'
-        : '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>';
-}
-
-// Function to get system preference
-function getSystemPreference() {
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
-// Function to set initial theme
-function setInitialTheme() {
-    const savedTheme = localStorage.getItem('darkMode');
-    if (savedTheme !== null) {
-        setTheme(JSON.parse(savedTheme));
-    } else {
-        setTheme(getSystemPreference());
-    }
-}
-
-// Toggle theme when button is clicked
-themeToggle.addEventListener('click', () => {
-    const isDark = !html.classList.contains('dark');
-    setTheme(isDark);
-});
-
-// Listen for system preference changes
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (localStorage.getItem('darkMode') === null) {
-        setTheme(e.matches);
-    }
-});
-
-// Set initial theme
-setInitialTheme();
+document.documentElement.classList.add('dark');
 
 function rickRoll() {
     window.open("", "_blank");
@@ -329,43 +279,7 @@ function setupProjectsToggle(totalCount) {
 const POSTER_API_BASE = 'https://filmkaar.fastapicloud.dev/poster/';
 // const POSTER_API_BASE = 'http://localhost:8000/poster/';
 
-// function buildHeroSlider(projects) {
-//     const slider = document.getElementById('hero-slider');
-//     if (!slider) return;
 
-//     // Each project with its own poster gets a slide with a matching title.
-//     const seen = new Set();
-//     const heroProjects = [];
-//     projects.forEach(project => {
-//         const title = (project.title || '').trim();
-//         if (project.poster && !seen.has(title)) {
-//             seen.add(title);
-//             heroProjects.push({ src: POSTER_API_BASE + encodeURIComponent(project.poster), title });
-//         }
-//     });
-//     const heroSlides = heroProjects.slice(0, 6);
-//     if (heroSlides.length === 0) return;  // keep the static fallback slide
-
-//     // Preload, then swap in the real slides for a clean first crossfade.
-//     // Capture each poster's aspect ratio so the hero can be sized to fit
-//     // the whole image on mobile (no crop, no letterbox bars).
-//     let loaded = 0;
-//     heroSlides.forEach(slide => {
-//         const img = new Image();
-//         img.onload = () => {
-//             if (img.naturalWidth && img.naturalHeight) {
-//                 slide.aspect = img.naturalWidth / img.naturalHeight;
-//             }
-//             done();
-//         };
-//         img.onerror = done;
-//         img.src = slide.src;
-//         function done() {
-//             loaded += 1;
-//             if (loaded === heroSlides.length) startHeroSlider(slider, heroSlides);
-//         }
-//     });
-// }
 
 function preloadRemainingSlides(heroSlides, index) {
 
@@ -405,6 +319,7 @@ function appendHeroSlide(slideData) {
     slide.className = "hero-slide";
 
     slide.dataset.title = slideData.title;
+    slide.dataset.url = slideData.url || '';
 
     slide.style.setProperty(
         "--bg",
@@ -434,6 +349,7 @@ function buildHeroSlider(projects) {
             heroProjects.push({
                 src: POSTER_API_BASE + encodeURIComponent(project.poster),
                 title,
+                url: project.url,
                 loaded: false,
                 aspect: null
             });
@@ -475,6 +391,11 @@ function setHeroTitle(title) {
     if (el) el.textContent = title;
 }
 
+function setPlayButtonUrl(url) {
+    const btn = document.getElementById('hero-play-btn');
+    if (btn && url) btn.href = url;
+}
+
 // On mobile, size the poster area (the slider) to show the whole poster
 // uncropped; the text and the sections below then flow right under it. Uses
 // the tallest poster (smallest width/height ratio) so no slide ever gets
@@ -495,54 +416,6 @@ function sizeHeroToPoster(heroSlides) {
     slider.style.minHeight = '0';
 }
 
-// function startHeroSlider(slider, heroSlides) {
-//     slider.innerHTML = '';  // remove the static fallback slide
-//     heroSlides.forEach(({ src }, i) => {
-//         const slide = document.createElement('div');
-//         slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
-//         // Shared by the blurred backdrop and the sharp poster layers (see CSS)
-//         slide.style.setProperty('--bg', `url('${src}')`);
-//         slide.style.zIndex = i === 0 ? '2' : '1';
-//         slide.innerHTML = '<div class="hero-slide-blur"></div><div class="hero-slide-img"></div>';
-//         slider.appendChild(slide);
-//     });
-
-//     // Set the first slide's title immediately
-//     setHeroTitle(heroSlides[0].title);
-
-//     // Fit the hero to the poster on mobile, and keep it fitted on rotate/resize
-//     sizeHeroToPoster(heroSlides);
-//     window.addEventListener('resize', () => sizeHeroToPoster(heroSlides));
-
-//     if (heroSlides.length < 2) return;  // nothing to rotate
-
-//     const slides = slider.querySelectorAll('.hero-slide');
-//     const FADE = 2000;        // must match the .hero-slide opacity transition
-//     const INTERVAL = 7000;    // time each poster holds before the next fades in
-//     let current = 0;
-
-//     setInterval(() => {
-//         const next = (current + 1) % slides.length;
-//         const prev = slides[current];
-//         const nextSlide = slides[next];
-
-//         // Bring the incoming slide on top and restart its Ken Burns from the start
-//         nextSlide.classList.remove('active');
-//         void nextSlide.offsetWidth;  // force reflow so the animation replays
-//         nextSlide.style.zIndex = '2';
-//         prev.style.zIndex = '1';
-//         nextSlide.classList.add('active');
-
-//         // Update hero title to match the incoming slide
-//         setHeroTitle(heroSlides[next].title);
-
-//         // Keep the outgoing slide zooming until the crossfade fully completes,
-//         // so it never snaps back to its original size while still visible.
-//         setTimeout(() => prev.classList.remove('active'), FADE);
-
-//         current = next;
-//     }, INTERVAL);
-// }
 
 // Fetch projects once and populate both the hero slider and the projects grid
 
@@ -558,6 +431,7 @@ function startHeroSlider(slider, heroSlides) {
     firstSlide.style.zIndex = "2";
 
     setHeroTitle(heroSlides[0].title);
+    setPlayButtonUrl(heroSlides[0].url);
 
     sizeHeroToPoster(heroSlides);
 
@@ -601,6 +475,7 @@ function startHeroSlider(slider, heroSlides) {
         setHeroTitle(
             nextSlide.dataset.title
         );
+        setPlayButtonUrl(nextSlide.dataset.url);
 
         setTimeout(() => {
             prev.classList.remove("active");
@@ -630,3 +505,142 @@ function loadProjects() {
 }
 
 loadProjects();
+
+// Testimonials data
+const testimonials = [
+    {
+        name: 'Angad Singh Pal',
+        position: 'Writer',
+        text: '"It has been a wonderful experience working with Filmkaar Production. I have had the opportunity to work on three projects with the team, and each experience has been smooth, professional, and well-coordinated. The entire team is supportive, respectful, and creates a comfortable working environment. The direction and coordination are always clear, making the work enjoyable and efficient. I truly appreciate the professionalism and dedication everyone brings to each project. I would be happy to work with Filmkaar Production again in the future and wish the entire team continued success. Thank you for giving me the opportunity to be a part of your projects."',
+    },
+    {
+        name: 'Rajwardhan Singh Chouhan',
+        position: 'Actor',
+        text: '"Hi Team Filmkaar Production 😊 Thank you so much for reaching out. It truly means a lot to be considered a part of the Filmkaar family ❤️\n\nMy experience working with Filmkaar Production has been genuinely wonderful. The work environment was positive, comfortable, and highly professional. The entire team was supportive, well coordinated and passionate about their work which made the whole process smooth and enjoyable.\n\nThe direction and coordination were clear and organized and I really appreciated the professionalism and respect shown towards artists. It never felt like just work — it felt like a collaborative creative journey.\n\nI would absolutely love to work with Filmkaar Production again in the future and would happily recommend it to other artists as well.\n\nThank you once again for the opportunity and for making the experience so memorable. Looking forward to many more projects together."',
+    },
+    {
+        name: 'Koyal Thiroda',
+        position: 'Actress',
+        text: '"It was a wonderful experience working with Filmkaar Production. The team was very friendly and professional. Really enjoyed the shoot. Thank you for the amazing experience. Looking forward to working together again 🤝"',
+    },
+    // {
+    //     name: 'Karan Joshi',
+    //     position: 'Screenwriter, Pune',
+    //     text: '"The direction in Dejal is something else. The restraint, the silences — it\'s filmmaking that trusts its audience. More people need to see this."',
+    // },
+    // {
+    //     name: 'Priya Nair',
+    //     position: 'Theatre Actor, Bangalore',
+    //     text: '"Kaaya gave me goosebumps. The atmosphere they built with such minimal resources is a testament to how strong the vision behind Filmkaar really is."',
+    // },
+    // {
+    //     name: 'Dev Anand Tiwari',
+    //     position: 'YouTube Viewer, Lucknow',
+    //     text: '"I stumbled onto Filmkaar by accident and ended up watching everything in one sitting. The AI Purush series had me in tears from laughing — subscribe immediately."',
+    // },
+];
+
+function renderTestimonials() {
+    const track = document.querySelector('#testimonials .testimonial-track');
+    if (!track) return;
+
+    testimonials.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'testimonial-card';
+        card.innerHTML = `
+            <div class="testimonial-quote">"</div>
+            <div class="testimonial-text-wrapper">
+                <p class="testimonial-text">${t.text}</p>
+            </div>
+            <button class="testimonial-show-more">Show more</button>
+            <div class="testimonial-author">
+                <p class="testimonial-author-name">${t.name}</p>
+                <p class="testimonial-author-position">${t.position}</p>
+            </div>
+        `;
+
+        const wrapper = card.querySelector('.testimonial-text-wrapper');
+        const btn = card.querySelector('.testimonial-show-more');
+
+        btn.addEventListener('click', () => {
+            const expanded = wrapper.classList.toggle('expanded');
+            btn.textContent = expanded ? 'Show less' : 'Show more';
+        });
+
+        track.appendChild(card);
+    });
+
+    // Single deferred pass after the slider layout settles
+    setTimeout(() => {
+        track.querySelectorAll('.testimonial-card').forEach(card => {
+            const wrapper = card.querySelector('.testimonial-text-wrapper');
+            const btn = card.querySelector('.testimonial-show-more');
+            if (wrapper.scrollHeight <= wrapper.clientHeight) {
+                btn.classList.add('testimonial-show-more-hidden');
+                wrapper.classList.add('no-overflow');
+            }
+        });
+    }, 100);
+
+    setupTestimonialSlider();
+}
+
+function setupTestimonialSlider() {
+    const track = document.querySelector('#testimonials .testimonial-track');
+    const prev = document.querySelector('#testimonials .testimonial-nav-prev');
+    const next = document.querySelector('#testimonials .testimonial-nav-next');
+    if (!track || !prev || !next) return;
+
+    function scrollAmount() {
+        const card = track.querySelector('.testimonial-card');
+        return card ? card.getBoundingClientRect().width + 24 : track.clientWidth * 0.8;
+    }
+
+    prev.addEventListener('click', () => track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: scrollAmount(), behavior: 'smooth' }));
+
+    function updateArrows() {
+        const overflowing = track.scrollWidth > track.clientWidth + 1;
+        prev.classList.toggle('testimonial-nav-hidden', !overflowing);
+        next.classList.toggle('testimonial-nav-hidden', !overflowing);
+    }
+    updateArrows();
+    window.addEventListener('resize', updateArrows);
+
+    const AUTOPLAY_INTERVAL = 4000;
+    let autoplayTimer = null;
+
+    function advance() {
+        const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+        if (atEnd) {
+            track.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+        }
+    }
+
+    function startAutoplay() {
+        if (autoplayTimer) return;
+        if (track.scrollWidth <= track.clientWidth + 1) return;
+        autoplayTimer = setInterval(advance, AUTOPLAY_INTERVAL);
+    }
+
+    function stopAutoplay() {
+        if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
+    }
+
+    track.addEventListener('mouseenter', stopAutoplay);
+    track.addEventListener('mouseleave', startAutoplay);
+    track.addEventListener('touchstart', stopAutoplay, { passive: true });
+    track.addEventListener('touchend', startAutoplay);
+    [prev, next].forEach(btn => {
+        btn.addEventListener('mouseenter', stopAutoplay);
+        btn.addEventListener('mouseleave', startAutoplay);
+    });
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduceMotion) startAutoplay();
+}
+
+renderTestimonials();
+lucide.createIcons();

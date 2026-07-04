@@ -726,6 +726,441 @@
     height: 1.25rem;
 }
 
+/* ===== Testimonials section ===== */
+.testimonial-slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.testimonial-track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.5rem 0.25rem 1.5rem;
+    scrollbar-width: none;
+}
+
+.testimonial-track::-webkit-scrollbar {
+    display: none;
+}
+
+.testimonial-card {
+    flex: 0 0 auto;
+    width: 320px;
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    background: transparent;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    .testimonial-card {
+        width: 360px;
+    }
+}
+
+.dark .testimonial-card {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.testimonial-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0, 0, 0, 0.25);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.dark .testimonial-card:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.testimonial-quote {
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+    color: rgba(0, 0, 0, 0.15);
+}
+
+.dark .testimonial-quote {
+    color: rgba(255, 255, 255, 0.15);
+}
+
+.testimonial-text-wrapper {
+    position: relative;
+    max-height: 175px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    transition: max-height 0.35s ease;
+}
+
+.testimonial-text-wrapper.expanded {
+    max-height: 1000px;
+}
+
+.testimonial-text-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background: linear-gradient(to bottom, transparent, #fff);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.dark .testimonial-text-wrapper::after {
+    background: linear-gradient(to bottom, transparent, #000);
+}
+
+.testimonial-text-wrapper.expanded::after {
+    opacity: 0;
+}
+
+.testimonial-text-wrapper.no-overflow::after {
+    display: none;
+}
+
+.testimonial-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #374151;
+    margin: 0;
+}
+
+.dark .testimonial-text {
+    color: #d1d5db;
+}
+
+.testimonial-show-more {
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 1.25rem;
+    text-align: left;
+    transition: color 0.2s ease;
+}
+
+.testimonial-show-more:hover {
+    color: #111;
+}
+
+.dark .testimonial-show-more {
+    color: #9ca3af;
+}
+
+.dark .testimonial-show-more:hover {
+    color: #fff;
+}
+
+.testimonial-show-more-hidden {
+    display: none;
+}
+
+.testimonial-author {
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
+.testimonial-author-name {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.testimonial-author-position {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.dark .testimonial-author-position {
+    color: #9ca3af;
+}
+
+.testimonial-nav {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.9);
+    color: #111;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    z-index: 2;
+}
+
+.testimonial-nav:hover {
+    transform: scale(1.1);
+}
+
+.dark .testimonial-nav {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(20, 20, 20, 0.9);
+    color: #fff;
+}
+
+.testimonial-nav svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.testimonial-nav-hidden {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .testimonial-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .testimonial-nav:hover {
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .testimonial-nav-prev {
+        left: -0.25rem;
+    }
+
+    .testimonial-nav-next {
+        right: -0.25rem;
+    }
+}
+
+/* ===== Contact card section ===== */
+.contact-card {
+    border-radius: 1.5rem;
+    overflow: hidden;
+    background: #f9f9f7;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.06);
+}
+
+.dark .contact-card {
+    background: #111;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
+}
+
+.contact-card-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+}
+
+@media (min-width: 768px) {
+    .contact-card-body {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.contact-left {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.contact-right {
+    padding: 3rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.dark .contact-right {
+    border-color: rgba(255, 255, 255, 0.07);
+}
+
+@media (min-width: 768px) {
+    .contact-right {
+        border-top: none;
+        border-left: 1px solid rgba(0, 0, 0, 0.07);
+    }
+
+    .dark .contact-right {
+        border-left-color: rgba(255, 255, 255, 0.07);
+    }
+}
+
+.contact-label {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    margin-bottom: 1.25rem;
+}
+
+.contact-heading {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    color: #111;
+}
+
+.dark .contact-heading {
+    color: #fff;
+}
+
+@media (min-width: 768px) {
+    .contact-heading {
+        font-size: 2.4rem;
+    }
+}
+
+.contact-tagline {
+    font-size: 0.9rem;
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.dark .contact-tagline {
+    color: #9ca3af;
+}
+
+.contact-email {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #111;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    word-break: break-all;
+    margin-bottom: 2rem;
+    display: inline-block;
+}
+
+.dark .contact-email {
+    color: #fff;
+}
+
+.contact-email:hover {
+    opacity: 0.65;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.dark .contact-details {
+    border-color: rgba(255, 255, 255, 0.07);
+}
+
+.contact-detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.contact-icon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+    color: #9ca3af;
+}
+
+.contact-address {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: #6b7280;
+}
+
+.dark .contact-address {
+    color: #9ca3af;
+}
+
+.contact-link {
+    font-size: 0.875rem;
+    color: #6b7280;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.dark .contact-link {
+    color: #9ca3af;
+}
+
+.contact-link:hover {
+    opacity: 0.7;
+}
+
+.contact-socials {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.contact-social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.85rem 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #374151;
+    background: #fff;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.contact-social-link svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+}
+
+.contact-social-link:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+    transform: translateX(4px);
+}
+
+.dark .contact-social-link {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #d1d5db;
+    background: #1a1a1a;
+}
+
+.dark .contact-social-link:hover {
+    background-color: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
 .repo-actions {
     display: flex;
     justify-content: flex-start;

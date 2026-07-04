@@ -70,12 +70,6 @@
         <img id="siteLogo" src="assets/desktop.png" alt="The Filmkaar Production">
     </a>
     <div class="site-nav-actions flex items-center space-x-4">
-        <button id="themeToggle" class="p-2 rounded-lg group relative">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-            </svg>
-        </button>
     </div>
 </nav>
 <main class="flex-grow flex flex-col">
@@ -89,16 +83,11 @@
         <div class="hero-overlay"></div>
         <div class="hero-content relative z-10">
             <h2
-                class="text-3xl md:text-4xl lg:text-5xl font-black mb-4 tracking-tighter leading-none text-shadow-glow-subtle">
+                class="text-3xl md:text-4xl lg:text-5xl font-black mb-8 tracking-tighter leading-none text-shadow-glow-subtle">
                 <span>Filmkaar</span>
             </h2>
-            <p class="hero-description text-base md:text-lg mb-8">
-                We craft impactful short films that inspire reflection and spark meaningful
-                conversations — one frame at a time.
-            </p>
-
-            <div class="flex space-x-4 mb-12">
-                <a href="https://www.youtube.com/@filmkaarproduction"
+<div class="flex space-x-4 mb-12">
+                <a id="hero-play-btn" href="https://www.youtube.com/@filmkaarproduction"
                     class="button button-play flex items-center space-x-2" target="_blank">
                     <i data-lucide="play" class="w-5 h-5 fill-current"></i>
                     <span>Play</span>
@@ -115,14 +104,14 @@
     </section>
 
     <section id="about" class="section py-20 bg-white dark:bg-black">
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto px-6 max-w-7xl">
             <h2 class="text-3xl font-bold mb-8 text-center font-semibold">About Filmkaar</h2>
             <div
                 class="flex flex-col md:flex-row items-center md:items-start justify-center space-y-8 md:space-y-0 md:space-x-12">
 
-                <div class="max-w-2xl text-center md:text-left">
+                <div class="w-full text-center md:text-left">
                     <p class="about-text">
-                        Hi there! 👋 At Filmkaar, we believe that stories have the power to inspire, provoke thought,
+                        Hi there! At Filmkaar, we believe that stories have the power to inspire, provoke thought,
                         and drive change. As a dedicated film production company, our passion lies in creating impactful
                         short films that resonate with audiences from diverse backgrounds.
                     </p>
@@ -137,7 +126,7 @@
 
                     <p class="about-text">
                         We are committed to uncovering untold stories, advocating for equality, and using film as a
-                        catalyst for social change. At Filmkaar, we don’t just create films—we create movements, one
+                        catalyst for social change. At Filmkaar, we don’t just create films, we create movements, one
                         frame at a time. <br><br>Join us in shaping a future filled with inspiration and positivity.
                     </p>
 
@@ -158,8 +147,8 @@
     <!-- Projects Section -->
 
     <section id="projects" class="section py-20 bg-white dark:bg-black">
-        <div class="container mx-auto px-4 max-w-6xl projects-container">
-            <h2 class="text-3xl font-bold mb-12 text-center font-space-mono">Our Films</h2>
+        <div class="container mx-auto px-6 max-w-7xl projects-container">
+            <h2 class="text-3xl font-bold mb-12 text-center">Our Films</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Project tiles will be dynamically inserted here -->
             </div>
@@ -189,32 +178,76 @@
         </div>
     </section> -->
 
-    <!-- Navigation Links Section -->
-    <section id="links" class="section py-16">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold mb-16 text-center font-space-mono">Connect with us</h2>
-            <nav class="nav-container">
-                <a href="https://www.youtube.com/@filmkaarproduction"
-                    class="nav-link text-xl md:text-2xl text-gray-600 dark:text-gray-400 font-bold" target="_blank">
-                    <i data-lucide="YouTube" class="w-6 h-6"></i>
-                    YouTube
-                </a>
-                <a href="https://www.instagram.com/filmkaarproduction/"
-                    class="nav-link text-xl md:text-2xl text-gray-600 dark:text-gray-400 font-bold" target="_blank">
-                    <i data-lucide="instagram" class="w-6 h-6"></i>
-                    Instagram
-                </a>
-                <a href="https://www.linkedin.com/company/filmkaar-production/"
-                    class="nav-link text-xl md:text-2xl text-gray-600 dark:text-gray-400 font-bold" target="_blank">
-                    <i data-lucide="linkedin" class="w-6 h-6"></i>
-                    LinkedIn
-                </a>
-                <a href="mailto:admin@thefilmkaarproduction.com"
-                    class="nav-link text-xl md:text-2xl text-gray-600 dark:text-gray-400 font-bold">
-                    <i data-lucide="mail" class="w-6 h-6"></i>
-                    Contact
-                </a>
-            </nav>
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section py-20 bg-white dark:bg-black">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <h2 class="text-3xl font-bold mb-14 text-center">What people say about us</h2>
+            <div class="testimonial-slider">
+                <button class="testimonial-nav testimonial-nav-prev" aria-label="Previous testimonial">
+                    <i data-lucide="chevron-left"></i>
+                </button>
+                <div class="testimonial-track"></div>
+                <button class="testimonial-nav testimonial-nav-next" aria-label="Next testimonial">
+                    <i data-lucide="chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Contact Card Section -->
+    <section id="contact" class="section py-20 bg-white dark:bg-black">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <div class="contact-card">
+                <div class="contact-card-body">
+
+                    <!-- Left column -->
+                    <div class="contact-left">
+                        <span class="contact-label">Contact</span>
+                        <h2 class="contact-heading">Let's create<br>something together.</h2>
+                        <p class="contact-tagline">Be part of our vision &amp; mission —<br>drop your resume at</p>
+                        <a href="mailto:admin@thefilmkaarproduction.com" class="contact-email">admin@thefilmkaarproduction.com</a>
+
+                        <div class="contact-details">
+                            <div class="contact-detail-row">
+                                <i data-lucide="map-pin" class="contact-icon"></i>
+                                <address class="contact-address not-italic">
+                                    Great Ratan Gold, Agar Road<br>
+                                    Ujjain, Madhya Pradesh, India — 456001
+                                </address>
+                            </div>
+                            <div class="contact-detail-row">
+                                <i data-lucide="mail" class="contact-icon"></i>
+                                <a href="mailto:admin@thefilmkaarproduction.com" class="contact-link">admin@thefilmkaarproduction.com</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right column -->
+                    <div class="contact-right">
+                        <span class="contact-label">Follow us</span>
+                        <div class="contact-socials">
+                            <a href="https://www.youtube.com/@filmkaarproduction" target="_blank" class="contact-social-link" aria-label="YouTube">
+                                <i data-lucide="youtube"></i>
+                                <span>YouTube</span>
+                            </a>
+                            <a href="https://www.instagram.com/filmkaarproduction/" target="_blank" class="contact-social-link" aria-label="Instagram">
+                                <i data-lucide="instagram"></i>
+                                <span>Instagram</span>
+                            </a>
+                            <a href="https://www.linkedin.com/company/filmkaar-production/" target="_blank" class="contact-social-link" aria-label="LinkedIn">
+                                <i data-lucide="linkedin"></i>
+                                <span>LinkedIn</span>
+                            </a>
+                            <a href="mailto:admin@thefilmkaarproduction.com" class="contact-social-link" aria-label="Email">
+                                <i data-lucide="mail"></i>
+                                <span>Email</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </section>
 
@@ -222,7 +255,7 @@
 
 <footer class="bg-white rounded-lg shadow-sm m-4 dark:bg-black">
     <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-        <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025 <a
+        <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2026 <a
                 href="http://thefilmkaarproduction.com/" class="hover:underline">The Filmkaar Production™</a> All Rights
             Reserved.</span>
 
@@ -234,16 +267,18 @@
             <li>
                 <a href="https://www.instagram.com/the_filmkaar/" class="hover:underline me-4 md:me-6">Instagram</a>
             </li>
+            <li>
+                <a href="https://www.linkedin.com/company/filmkaar-production/" class="hover:underline">LinkedIn</a>
+            </li>
         </ul>
     </div>
 
-    <div class="w-full text-center mt-4 text-sm text-gray-500 dark:text-gray-400">
-        <span>Designed & Developed by <a href="https://www.linkedin.com/in/tanishqrawat17/"
-                class="hover:underline">Tanishq Rawat</a> (The Filmkaar Production)</span>
+    <div class="w-full mx-auto max-w-screen-xl px-4 pb-4 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+        <span>Designed by <a href="https://www.linkedin.com/in/ashutosh-sharma-356173250/" target="_blank" class="hover:underline">Ashutosh Sharma</a></span>
+        <span>Developed by <a href="https://www.linkedin.com/in/tanishqrawat17/" target="_blank" class="hover:underline">Tanishq Rawat</a></span>
     </div>
 </footer>
 
 <script src="script.js"></script>
 
 </html>
-

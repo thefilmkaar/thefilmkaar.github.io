@@ -5,6 +5,14 @@ function scrollDown() {
     });
 }
 
+function revealPage() {
+    document.body.style.visibility = "visible";
+
+    requestAnimationFrame(() => {
+        document.body.style.opacity = "1";
+    });
+}
+
 lucide.createIcons();
 
 // Choose the navbar logo based on screen size: a wider logo for big screens
@@ -321,42 +329,145 @@ function setupProjectsToggle(totalCount) {
 const POSTER_API_BASE = 'https://filmkaar.fastapicloud.dev/poster/';
 // const POSTER_API_BASE = 'http://localhost:8000/poster/';
 
+// function buildHeroSlider(projects) {
+//     const slider = document.getElementById('hero-slider');
+//     if (!slider) return;
+
+//     // Each project with its own poster gets a slide with a matching title.
+//     const seen = new Set();
+//     const heroProjects = [];
+//     projects.forEach(project => {
+//         const title = (project.title || '').trim();
+//         if (project.poster && !seen.has(title)) {
+//             seen.add(title);
+//             heroProjects.push({ src: POSTER_API_BASE + encodeURIComponent(project.poster), title });
+//         }
+//     });
+//     const heroSlides = heroProjects.slice(0, 6);
+//     if (heroSlides.length === 0) return;  // keep the static fallback slide
+
+//     // Preload, then swap in the real slides for a clean first crossfade.
+//     // Capture each poster's aspect ratio so the hero can be sized to fit
+//     // the whole image on mobile (no crop, no letterbox bars).
+//     let loaded = 0;
+//     heroSlides.forEach(slide => {
+//         const img = new Image();
+//         img.onload = () => {
+//             if (img.naturalWidth && img.naturalHeight) {
+//                 slide.aspect = img.naturalWidth / img.naturalHeight;
+//             }
+//             done();
+//         };
+//         img.onerror = done;
+//         img.src = slide.src;
+//         function done() {
+//             loaded += 1;
+//             if (loaded === heroSlides.length) startHeroSlider(slider, heroSlides);
+//         }
+//     });
+// }
+
+function preloadRemainingSlides(heroSlides, index) {
+
+    if (index >= heroSlides.length)
+        return;
+
+    const img = new Image();
+
+    img.decoding = "async";
+
+    img.onload = () => {
+
+        heroSlides[index].loaded = true;
+        heroSlides[index].aspect =
+            img.naturalWidth / img.naturalHeight;
+
+        appendHeroSlide(heroSlides[index]);
+
+        preloadRemainingSlides(heroSlides, index + 1);
+    };
+
+    img.onerror = () => {
+        console.warn("Skipping poster:", heroSlides[index].src);
+
+        preloadRemainingSlides(heroSlides, index + 1);
+    };
+
+    img.src = heroSlides[index].src;
+}
+
+function appendHeroSlide(slideData) {
+
+    const slider = document.getElementById("hero-slider");
+
+    const slide = document.createElement("div");
+
+    slide.className = "hero-slide";
+
+    slide.dataset.title = slideData.title;
+
+    slide.style.setProperty(
+        "--bg",
+        `url('${slideData.src}')`
+    );
+
+    slide.innerHTML =
+        '<div class="hero-slide-blur"></div><div class="hero-slide-img"></div>';
+
+    slider.appendChild(slide);
+}
+
+
 function buildHeroSlider(projects) {
     const slider = document.getElementById('hero-slider');
     if (!slider) return;
 
-    // Each project with its own poster gets a slide with a matching title.
     const seen = new Set();
     const heroProjects = [];
+
     projects.forEach(project => {
         const title = (project.title || '').trim();
+
         if (project.poster && !seen.has(title)) {
             seen.add(title);
-            heroProjects.push({ src: POSTER_API_BASE + encodeURIComponent(project.poster), title });
-        }
-    });
-    const heroSlides = heroProjects.slice(0, 6);
-    if (heroSlides.length === 0) return;  // keep the static fallback slide
 
-    // Preload, then swap in the real slides for a clean first crossfade.
-    // Capture each poster's aspect ratio so the hero can be sized to fit
-    // the whole image on mobile (no crop, no letterbox bars).
-    let loaded = 0;
-    heroSlides.forEach(slide => {
-        const img = new Image();
-        img.onload = () => {
-            if (img.naturalWidth && img.naturalHeight) {
-                slide.aspect = img.naturalWidth / img.naturalHeight;
-            }
-            done();
-        };
-        img.onerror = done;
-        img.src = slide.src;
-        function done() {
-            loaded += 1;
-            if (loaded === heroSlides.length) startHeroSlider(slider, heroSlides);
+            heroProjects.push({
+                src: POSTER_API_BASE + encodeURIComponent(project.poster),
+                title,
+                loaded: false,
+                aspect: null
+            });
         }
     });
+
+    const heroSlides = heroProjects.slice(0, 6);
+
+    if (!heroSlides.length) return;
+
+    // Only load the first image initially
+    const first = new Image();
+
+    first.onload = () => {
+        first.decoding = "async";
+
+        heroSlides[0].loaded = true;
+        heroSlides[0].aspect =
+            first.naturalWidth / first.naturalHeight;
+
+        startHeroSlider(slider, heroSlides);
+
+        // Reveal the website only after the first hero is ready
+        revealPage();
+
+        // Load remaining posters in the background
+        preloadRemainingSlides(heroSlides, 1);
+    };
+
+    first.onerror = () => {
+        console.error("Failed loading first hero poster.");
+    };
+
+    first.src = heroSlides[0].src;
 }
 
 function setHeroTitle(title) {
@@ -384,56 +495,122 @@ function sizeHeroToPoster(heroSlides) {
     slider.style.minHeight = '0';
 }
 
-function startHeroSlider(slider, heroSlides) {
-    slider.innerHTML = '';  // remove the static fallback slide
-    heroSlides.forEach(({ src }, i) => {
-        const slide = document.createElement('div');
-        slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
-        // Shared by the blurred backdrop and the sharp poster layers (see CSS)
-        slide.style.setProperty('--bg', `url('${src}')`);
-        slide.style.zIndex = i === 0 ? '2' : '1';
-        slide.innerHTML = '<div class="hero-slide-blur"></div><div class="hero-slide-img"></div>';
-        slider.appendChild(slide);
-    });
+// function startHeroSlider(slider, heroSlides) {
+//     slider.innerHTML = '';  // remove the static fallback slide
+//     heroSlides.forEach(({ src }, i) => {
+//         const slide = document.createElement('div');
+//         slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
+//         // Shared by the blurred backdrop and the sharp poster layers (see CSS)
+//         slide.style.setProperty('--bg', `url('${src}')`);
+//         slide.style.zIndex = i === 0 ? '2' : '1';
+//         slide.innerHTML = '<div class="hero-slide-blur"></div><div class="hero-slide-img"></div>';
+//         slider.appendChild(slide);
+//     });
 
-    // Set the first slide's title immediately
+//     // Set the first slide's title immediately
+//     setHeroTitle(heroSlides[0].title);
+
+//     // Fit the hero to the poster on mobile, and keep it fitted on rotate/resize
+//     sizeHeroToPoster(heroSlides);
+//     window.addEventListener('resize', () => sizeHeroToPoster(heroSlides));
+
+//     if (heroSlides.length < 2) return;  // nothing to rotate
+
+//     const slides = slider.querySelectorAll('.hero-slide');
+//     const FADE = 2000;        // must match the .hero-slide opacity transition
+//     const INTERVAL = 7000;    // time each poster holds before the next fades in
+//     let current = 0;
+
+//     setInterval(() => {
+//         const next = (current + 1) % slides.length;
+//         const prev = slides[current];
+//         const nextSlide = slides[next];
+
+//         // Bring the incoming slide on top and restart its Ken Burns from the start
+//         nextSlide.classList.remove('active');
+//         void nextSlide.offsetWidth;  // force reflow so the animation replays
+//         nextSlide.style.zIndex = '2';
+//         prev.style.zIndex = '1';
+//         nextSlide.classList.add('active');
+
+//         // Update hero title to match the incoming slide
+//         setHeroTitle(heroSlides[next].title);
+
+//         // Keep the outgoing slide zooming until the crossfade fully completes,
+//         // so it never snaps back to its original size while still visible.
+//         setTimeout(() => prev.classList.remove('active'), FADE);
+
+//         current = next;
+//     }, INTERVAL);
+// }
+
+// Fetch projects once and populate both the hero slider and the projects grid
+
+function startHeroSlider(slider, heroSlides) {
+
+    slider.innerHTML = "";
+
+    appendHeroSlide(heroSlides[0]);
+
+    const firstSlide = slider.firstElementChild;
+
+    firstSlide.classList.add("active");
+    firstSlide.style.zIndex = "2";
+
     setHeroTitle(heroSlides[0].title);
 
-    // Fit the hero to the poster on mobile, and keep it fitted on rotate/resize
     sizeHeroToPoster(heroSlides);
-    window.addEventListener('resize', () => sizeHeroToPoster(heroSlides));
 
-    if (heroSlides.length < 2) return;  // nothing to rotate
+    if (!slider.dataset.resizeAttached) {
 
-    const slides = slider.querySelectorAll('.hero-slide');
-    const FADE = 2000;        // must match the .hero-slide opacity transition
-    const INTERVAL = 7000;    // time each poster holds before the next fades in
+        window.addEventListener("resize", () =>
+            sizeHeroToPoster(heroSlides)
+        );
+
+        slider.dataset.resizeAttached = "true";
+    }
+
+    const FADE = 2000;
+    const INTERVAL = 7000;
+
     let current = 0;
 
     setInterval(() => {
+
+        const slides =
+            slider.querySelectorAll(".hero-slide");
+
+        // Only rotate through posters that are loaded
+        if (slides.length < 2)
+            return;
+
         const next = (current + 1) % slides.length;
+
         const prev = slides[current];
         const nextSlide = slides[next];
 
-        // Bring the incoming slide on top and restart its Ken Burns from the start
-        nextSlide.classList.remove('active');
-        void nextSlide.offsetWidth;  // force reflow so the animation replays
-        nextSlide.style.zIndex = '2';
-        prev.style.zIndex = '1';
-        nextSlide.classList.add('active');
+        nextSlide.classList.remove("active");
 
-        // Update hero title to match the incoming slide
-        setHeroTitle(heroSlides[next].title);
+        void nextSlide.offsetWidth;
 
-        // Keep the outgoing slide zooming until the crossfade fully completes,
-        // so it never snaps back to its original size while still visible.
-        setTimeout(() => prev.classList.remove('active'), FADE);
+        nextSlide.style.zIndex = "2";
+        prev.style.zIndex = "1";
+
+        nextSlide.classList.add("active");
+
+        setHeroTitle(
+            nextSlide.dataset.title
+        );
+
+        setTimeout(() => {
+            prev.classList.remove("active");
+        }, FADE);
 
         current = next;
+
     }, INTERVAL);
 }
 
-// Fetch projects once and populate both the hero slider and the projects grid
 function loadProjects() {
     $.ajax({
         url: "https://filmkaar.fastapicloud.dev/projects",

@@ -15,8 +15,6 @@ function revealPage() {
 
 lucide.createIcons();
 
-// Choose the navbar logo based on screen size: a wider logo for big screens
-// and a compact one for mobile. Update the two paths below to your files.
 const DESKTOP_LOGO = 'assets/desktop.png';
 const MOBILE_LOGO = 'assets/mobile.png';
 const MOBILE_LOGO_MAX_WIDTH = 767;
